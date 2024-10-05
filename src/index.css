@@ -4,3 +4,36 @@
   margin: 0;
   text-decoration: none;
 }
+
+:root {
+  --Baby-powder: 241, 245, 242;
+  --Ecru: 194, 168, 120;
+  --Field-drab: 110, 99, 61;
+  --Hunter-green: 53, 88, 52;
+  --Dark-green: 20, 40, 29;
+}
+
+.header {
+  background-color: rgba(var(--Ecru), .9);
+  transition: background-color 0.3s;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1030;
+  padding: 10px;
+}
+
+.header.scrolled {
+  background-color: rgba(var(--Ecru), .6);
+}
+
+.header .menu-icon,
+.header .user-icon {
+  cursor: pointer;
+}
+
+.header .navbar-nav {
+  display: flex;
+  flex-direction: row;
+}
