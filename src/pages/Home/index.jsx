@@ -9,68 +9,44 @@ import chuvoso from '../../icons/chuva.png';
 import umidade from '../../icons/umidade.png';
 import temperatura from '../../icons/temperatura.png';
 
+import { AdvancedMarker, Map, Pin } from "@vis.gl/react-google-maps";
+import { useState } from "react";
+
 const Home = () => {
+  const [marker, setMarker] = useState(null);
+
+  const handleMapClick = (e) => {
+    console.log(e.detail.latLng.lat, e.detail.latLng.lng);
+    setMarker({
+      lat: e.detail.latLng.lat,
+      lng: e.detail.latLng.lng,
+    });
+  };
+
   return (
-    <>
-      <Header />
-      <div className="container" style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
-        {/* Seção 1: Umidade e Temperatura */}
-        <section className="text-center my-4">
-          <h2>Umidade</h2>
-          <div className="d-flex justify-content-center align-items-center mb-3">
-            <img src={umidade} alt="Umidade" className="img-fluid" style={{ maxWidth: '50px' }} />
-            <span className="mx-2">65%</span>
-          </div>
-          <h2>Temperatura</h2>
-          <div className="d-flex justify-content-center align-items-center mb-3">
-            <img src={temperatura} alt="Temperatura" className="img-fluid" style={{ maxWidth: '50px' }} />
-            <span className="mx-2">25°C</span>
-          </div>
-        </section>
-
-        <hr />
-
-        {/* Seção 2: Previsão do Tempo para os Próximos 5 Dias */}
-        <section className="text-center my-4">
-          <h2>Previsão do Tempo para os Próximos 5 Dias</h2>
-          <div className="d-flex justify-content-around flex-wrap">
-            <div className="text-center mb-3">
-              <h3>Segunda</h3>
-              <img src={ensolarado} alt="Sol" className="img-fluid" style={{ maxWidth: '50px' }} />
-            </div>
-            <div className="text-center mb-3">
-              <h3>Terça</h3>
-              <img src={chuvoso} alt="Chuva" className="img-fluid" style={{ maxWidth: '50px' }} />
-            </div>
-            <div className="text-center mb-3">
-              <h3>Quarta</h3>
-              <img src={nublado} alt="Nublado" className="img-fluid" style={{ maxWidth: '50px' }} />
-            </div>
-            <div className="text-center mb-3">
-              <h3>Quinta</h3>
-              <img src={ensolarado} alt="Sol" className="img-fluid" style={{ maxWidth: '50px' }} />
-            </div>
-            <div className="text-center mb-3">
-              <h3>Sexta</h3>
-              <img src={chuvoso} alt="Chuva" className="img-fluid" style={{ maxWidth: '50px' }} />
-            </div>
-          </div>
-        </section>
-
-        <hr />
-
-        {/* Seção 3: Imagens */}
-        <section className="text-center my-4">
-          <h2>Imagens do Clima</h2>
-          <div className="d-flex justify-content-center">
-            <img src={ensolarado} alt="Dia ensolarado" className="img-fluid mx-2" style={{ maxWidth: '150px' }} />
-            <img src={chuvoso} alt="Dia chuvoso" className="img-fluid mx-2" style={{ maxWidth: '150px' }} />
-          </div>
-        </section>
-
-        <Footer />
-      </div>
-    </>
+    <Map
+      style={{ width: `${192 * 6}px`, height: `${108 * 6}px` }}
+      defaultCenter={{ lat: -24.029286, lng: -52.3370791 }}
+      streetView={true}
+      defaultZoom={17}
+      gestureHandling={"greedy"}
+      disableDefaultUI={true}
+      mapTypeId={"hybrid"}
+      onClick={handleMapClick}
+      mapId={"f1b7b3b3b1b3b1b3"}
+      draggingCursor={"move"}
+      draggableCursor={"pointer"}
+    >
+      {marker && (
+        <AdvancedMarker position={{ lat: marker.lat, lng: marker.lng }}>
+          <Pin
+            background={"#0f9d58"}
+            borderColor={"#006425"}
+            glyphColor={"#60d98f"}
+          />
+        </AdvancedMarker>
+      )}
+    </Map>
   );
 };
 
