@@ -20,10 +20,11 @@ const Home = () => {
       defaultZoom={17}
       gestureHandling={"greedy"}
       disableDefaultUI={true}
-      mapTypeId={"satellite"}
+      mapTypeId={"hybrid"}
       onClick={handleMapClick}
       mapId={"f1b7b3b3b1b3b1b3"}
-      draggingCursor={""}
+      draggingCursor={"move"}
+      draggableCursor={"pointer"}
     >
       {marker && (
         <AdvancedMarker position={{ lat: marker.lat, lng: marker.lng }}>
