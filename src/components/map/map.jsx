@@ -300,6 +300,7 @@ const MapHandler = ({ place, marker }) => {
 
     if (place.geometry?.viewport) {
       map.fitBounds(place.geometry?.viewport);
+      map.setZoom(17);
     }
   }, [map, place, marker]);
   return null;

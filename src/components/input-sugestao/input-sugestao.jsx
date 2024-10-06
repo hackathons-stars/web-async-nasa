@@ -20,7 +20,7 @@ export default function ElementInputSugestao({ onSend, disable }) {
         onChange={(e) => setInputValue(e.target.value)}
         placeholder="Digite aqui sobre"
       />
-      <button className="buttonSend" onClick={handleSend} disabled={disable}>{disable ? "Carregando !" : "Enviar"}</button>
+      <button className="buttonSend" onClick={handleSend} disabled={disable}>{disable ? "Buscando !" : "Enviar"}</button>
     </div>
   );
 };
