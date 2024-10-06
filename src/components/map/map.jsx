@@ -3,12 +3,16 @@ import { AdvancedMarker, Map, Pin } from "@vis.gl/react-google-maps";
 import { useState, useEffect } from "react";
 
 import { FaPlus } from "react-icons/fa";
+import MarkerInfoModal from "../marker-info-modal/marker-info-modal";
 
 export default function ElementMap() {
   const [markers, setMarkers] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [openInfoModal, setOpenInfoModal] = useState(false);
   const [newLocationName, setNewLocationName] = useState("");
-  const [showModal, setShowModal] = useState(false);
+
+  const [mapZoom, setMapZoom] = useState(17);
 
   useEffect(() => {
     const savedMarkers = JSON.parse(localStorage.getItem("markers")) || [];
@@ -16,44 +20,48 @@ export default function ElementMap() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("markers", JSON.stringify(markers));
+    if (markers.length > 0) {
+      localStorage.setItem("markers", JSON.stringify(markers));
+    }
   }, [markers]);
 
   const handleMapClick = (e) => {
     const newMarker = {
       lat: e.detail.latLng.lat,
       lng: e.detail.latLng.lng,
-      name: "",
     };
+
     setSelectedMarker(newMarker);
   };
 
   const handleSaveMarker = () => {
-    if (!newLocationName) return;
-
     const newMarker = {
-      ...selectedMarker,
       name: newLocationName,
+      ...selectedMarker,
     };
 
     setMarkers([...markers, newMarker]);
     setSelectedMarker(null);
     setNewLocationName("");
+
+    setOpenCreateModal(false);
   };
 
   const handleMarkerClick = (marker) => {
     setSelectedMarker(marker);
-    setShowModal(true);
+    setOpenInfoModal(true);
   };
 
   return (
     <div className="map-container">
-      <button onClick={handleSaveMarker} className="addButton">
-        <FaPlus />
-      </button>
+      {selectedMarker && (
+        <button onClick={() => setOpenCreateModal(true)} className="addButton">
+          <FaPlus />
+        </button>
+      )}
 
       <Map
-        style={{ width: `100%`, height: `-webkit-fill-available` }}
+        style={{ width: `100%`, height: `calc(100vh - 80px)` }}
         defaultCenter={{ lat: -24.029286, lng: -52.3370791 }}
         defaultZoom={17}
         gestureHandling={"greedy"}
@@ -63,6 +71,9 @@ export default function ElementMap() {
         mapId={"f1b7b3b3b1b3b1b3"}
         draggingCursor={"move"}
         draggableCursor={"pointer"}
+        onBoundsChanged={(infos) => {
+          setMapZoom(infos.detail.zoom);
+        }}
       >
         {markers.map((marker, index) => (
           <AdvancedMarker
@@ -75,14 +86,11 @@ export default function ElementMap() {
               borderColor={"#640000"}
               glyphColor={"#d96060"}
             >
-              <div className="markerInfos">
-                <h5>{marker.name || "Posição customizada"}</h5>
-                <div className="divider"></div>
-                <div>
-                  <p>Latitude: {parseFloat(marker.lat).toFixed(6)}</p>
-                  <p>Longitude: {parseFloat(marker.lng).toFixed(6)}</p>
+              {mapZoom > 15 && (
+                <div className="markerName">
+                  <p>{marker.name || "Posição customizada"}</p>
                 </div>
-              </div>
+              )}
             </Pin>
           </AdvancedMarker>
         ))}
@@ -96,32 +104,71 @@ export default function ElementMap() {
               borderColor={"#640000"}
               glyphColor={"#d96060"}
             >
-              <div className="markerInfos">
-                <h5>Posição customizada</h5>
-                <div className="divider"></div>
-                <div>
-                  <p>
-                    <b>Latitude:</b> {parseFloat(selectedMarker.lat).toFixed(6)}
-                  </p>
-                  <p>
-                    <b>Longitude:</b>{" "}
-                    {parseFloat(selectedMarker.lng).toFixed(6)}
-                  </p>
+              {!openInfoModal && (
+                <div className="markerInfos">
+                  <h5>Posição customizada</h5>
+                  <div className="divider"></div>
+                  <div>
+                    <p>
+                      <b>Latitude:</b>{" "}
+                      {parseFloat(selectedMarker.lat).toFixed(6)}
+                    </p>
+                    <p>
+                      <b>Longitude:</b>{" "}
+                      {parseFloat(selectedMarker.lng).toFixed(6)}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              )}
             </Pin>
           </AdvancedMarker>
         )}
       </Map>
 
-      {showModal && selectedMarker && (
-        <div className="modal">
-          <h2>{selectedMarker.name}</h2>
-          <p>Latitude: {selectedMarker.lat}</p>
-          <p>Longitude: {selectedMarker.lng}</p>
-          <button onClick={() => setShowModal(false)}>Fechar</button>
-        </div>
-      )}
+      <MarkerInfoModal
+        isMobile={true}
+        open={openCreateModal}
+        onClose={() => setOpenCreateModal(false)}
+        position="bottom"
+      >
+        {openCreateModal && (
+          <div className="">
+            <input
+              type="text"
+              placeholder="Nome do local"
+              onChange={(e) => {
+                setNewLocationName(e.target.value);
+              }}
+            />
+            <div className="divider"></div>
+            <div>
+              <p>
+                <b>Latitude:</b> {parseFloat(selectedMarker.lat).toFixed(6)}
+              </p>
+              <p>
+                <b>Longitude:</b> {parseFloat(selectedMarker.lng).toFixed(6)}
+              </p>
+            </div>
+            <div className="divider"></div>
+            <button onClick={handleSaveMarker}>Salvar</button>
+          </div>
+        )}
+      </MarkerInfoModal>
+      <MarkerInfoModal
+        isMobile={true}
+        open={openInfoModal}
+        onClose={() => setOpenInfoModal(false)}
+        position="bottom"
+      >
+        {openInfoModal && (
+          <div className="">
+            <h1>{selectedMarker.name}</h1>
+            <div className="divider"></div>
+            <h1>{selectedMarker.lat}</h1>
+            <h1>{selectedMarker.lng}</h1>
+          </div>
+        )}
+      </MarkerInfoModal>
     </div>
   );
 }
