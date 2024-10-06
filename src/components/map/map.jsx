@@ -16,7 +16,9 @@ import { FaPlus } from "react-icons/fa";
 import MarkerInfoModal from "../marker-info-modal/marker-info-modal";
 import { MdDelete } from "react-icons/md";
 
-export default function ElementMap() {
+export default function ElementMap(props) {
+  const { onSaveDefaultLoc , updateMarkers} = props;
+
   const [markers, setMarkers] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -223,6 +225,7 @@ export default function ElementMap() {
                 <b>Longitude:</b> {parseFloat(selectedMarker.lng).toFixed(6)}
               </p>
             </div>
+            <button>Salvar como principal</button>
             <div className="divider"></div>
           </div>
         )}

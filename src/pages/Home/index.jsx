@@ -25,6 +25,32 @@ export default function Home() {
 
   const [weatherForecast, setWeatherForecast] = useState([]);
 
+  const [markers, setMarkers] = useState([]);
+
+  const updateMarkers = async () => {
+    const data = dataOpen;
+
+    const savedMarkes = JSON.parse(localStorage.getItem("markers")) ?? [];
+
+    const markersWithData = [];
+
+    for (let i = 0; i < savedMarkes.length; i++) {
+      const { name, lat, lng } = savedMarkes.at(i);
+
+      //const { current } = await getWeather(lng, lat);
+      const { current } = await (async () => { return data })();
+      const { temp, uvi, humidity } = current;
+
+      markersWithData.push({
+        name, lat, lng, temp, uvi, humidity
+      })
+    }
+
+    console.log(markersWithData);
+
+    setMarkers(markersWithData);
+  }
+
   useEffect(() => {
     const data = dataOpen;
     const { current, daily } = data;
@@ -40,7 +66,7 @@ export default function Home() {
     console.log({ ...todayWeather });
 
     setWeatherForecast(daily.map(({ weather, temp, uvi, humidity, dt }) => {
-      const date = new Date(dt*1000);
+      const date = new Date(dt * 1000);
 
       return {
         date: date.toLocaleDateString('pt-BR'),
@@ -80,11 +106,14 @@ export default function Home() {
       */
   }, []);
 
+  useEffect(() => {
+    updateMarkers();
+  }, []);
+
   return (
     <div id="Home">
       <div className='containerHome'>
-        <div className="content">
-
+        <div className="contentHome">
           <ElementTodayWeather
             temp={todayWeather.temp}
             title={todayWeather.city}
@@ -102,7 +131,11 @@ export default function Home() {
           />
         </div>
         <StructSlideBottom>
-          <ElementMap />
+          <ElementMap onSaveDefaultLoc={() => {
+            console.log("Salvo como favorito !");
+          }}
+            updateMarkers={updateMarkers}
+          />
         </StructSlideBottom>
       </div>
     </div>
