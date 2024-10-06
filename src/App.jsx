@@ -7,7 +7,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
-    <APIProvider apiKey={"AIzaSyDRvcXg0ENBOpG97u6miPvH3_2Bdl66sCk"}>
+    <APIProvider apiKey={"AIzaSyDRvcXg0ENBOpG97u6miPvH3_2Bdl66sCk"} 
+    solutionChannel="GMP_devsite_samples_v3_rgmautocomplete"
+    >
       <Router>
         <Routes>
           <Route path={routes.HOME} element={<Home />} />
