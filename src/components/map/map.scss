@@ -9,16 +9,12 @@
   background-color: #f7f7f7;
   border-radius: 12px;
   padding: 12px;
-  margin-top: -150px;
+  margin-top: -180px;
   width: 280px;
   color: rgb(46, 46, 46);
   font-size: 14px;
 
   gap: 10px;
-
-  p {
-    margin: 5px 0px;
-  }
 
   h5 {
     margin: 0;
@@ -56,23 +52,6 @@
   background-color: #0099ff;
 }
 
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  border-radius: 8px;
-}
-
-.modal button {
-  margin-top: 10px;
-  margin-right: 10px;
-}
-
 .divider {
   width: 100%;
 
@@ -81,4 +60,25 @@
   background-color: #6e6e6e;
 
   margin: auto;
+
+  margin-top: 8px;
+}
+
+.saveCreationButton {
+  background-color: #0099ff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  margin-top: 10px;
+
+  width: 100%;
+}
+
+.newLocationName {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #6e6e6e;
+  border-radius: 8px;
+  margin-top: 10px;
 }

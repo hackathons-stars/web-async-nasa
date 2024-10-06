@@ -1,15 +1,20 @@
+/* eslint-disable react/prop-types */
 import "./map.scss";
-import { AdvancedMarker, Map, Pin } from "@vis.gl/react-google-maps";
-import { useState, useEffect, useRef } from "react";
-import { FaPlus } from "react-icons/fa";
-import MarkerInfoModal from "../marker-info-modal/marker-info-modal";
 import {
+  APIProvider,
   ControlPosition,
   MapControl,
+  AdvancedMarker,
+  Map,
+  Pin,
   useMap,
   useMapsLibrary,
   useAdvancedMarkerRef,
 } from "@vis.gl/react-google-maps";
+import { useState, useEffect, useRef } from "react";
+
+import { FaPlus } from "react-icons/fa";
+import MarkerInfoModal from "../marker-info-modal/marker-info-modal";
 
 export default function ElementMap() {
   const [markers, setMarkers] = useState([]);
@@ -17,7 +22,10 @@ export default function ElementMap() {
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openInfoModal, setOpenInfoModal] = useState(false);
   const [newLocationName, setNewLocationName] = useState("");
+
   const [selectedPlace, setSelectedPlace] = useState(null);
+  const [markerRef, marker] = useAdvancedMarkerRef();
+
   const [mapZoom, setMapZoom] = useState(17);
 
   useEffect(() => {
@@ -33,21 +41,26 @@ export default function ElementMap() {
 
   const handleMapClick = (e) => {
     const newMarker = {
-      lat: e.detail.latLng.lat(),
-      lng: e.detail.latLng.lng(),
+      lat: e.detail.latLng.lat,
+      lng: e.detail.latLng.lng,
     };
+
     setSelectedMarker(newMarker);
-    setOpenCreateModal(true);
   };
 
   const handleSaveMarker = () => {
+    if (!selectedMarker) return;
+    if (!newLocationName) return;
+
     const newMarker = {
       name: newLocationName,
       ...selectedMarker,
     };
+
     setMarkers([...markers, newMarker]);
     setSelectedMarker(null);
     setNewLocationName("");
+
     setOpenCreateModal(false);
   };
 
@@ -65,7 +78,7 @@ export default function ElementMap() {
       )}
 
       <Map
-        style={{ width: "100%", height: "calc(100vh - 80px)" }}
+        style={{ width: `100%`, height: `calc(100vh - 80px)` }}
         defaultCenter={{ lat: -24.029286, lng: -52.3370791 }}
         defaultZoom={17}
         gestureHandling={"greedy"}
@@ -73,15 +86,25 @@ export default function ElementMap() {
         mapTypeId={"hybrid"}
         onClick={handleMapClick}
         mapId={"f1b7b3b3b1b3b1b3"}
-        onBoundsChanged={(infos) => setMapZoom(infos.detail.zoom)}
+        draggingCursor={"move"}
+        draggableCursor={"pointer"}
+        onBoundsChanged={(infos) => {
+          setMapZoom(infos.detail.zoom);
+        }}
       >
+        <AdvancedMarker ref={markerRef} position={null} />
+
         {markers.map((marker, index) => (
           <AdvancedMarker
             key={index}
             position={{ lat: marker.lat, lng: marker.lng }}
             onClick={() => handleMarkerClick(marker)}
           >
-            <Pin background={"#9d0f0f"} borderColor={"#640000"} glyphColor={"#d96060"}>
+            <Pin
+              background={"#9d0f0f"}
+              borderColor={"#640000"}
+              glyphColor={"#d96060"}
+            >
               {mapZoom > 15 && (
                 <div className="markerName">
                   <p>{marker.name || "Posição customizada"}</p>
@@ -92,14 +115,29 @@ export default function ElementMap() {
         ))}
 
         {selectedMarker && (
-          <AdvancedMarker position={{ lat: selectedMarker.lat, lng: selectedMarker.lng }}>
-            <Pin background={"#9d0f0f"} borderColor={"#640000"} glyphColor={"#d96060"}>
+          <AdvancedMarker
+            position={{ lat: selectedMarker.lat, lng: selectedMarker.lng }}
+            onClick={() => setSelectedMarker(null)}
+          >
+            <Pin
+              background={"#9d0f0f"}
+              borderColor={"#640000"}
+              glyphColor={"#d96060"}
+            >
               {!openInfoModal && (
                 <div className="markerInfos">
                   <h5>Posição customizada</h5>
                   <div className="divider"></div>
-                  <p><b>Latitude:</b> {parseFloat(selectedMarker.lat).toFixed(6)}</p>
-                  <p><b>Longitude:</b> {parseFloat(selectedMarker.lng).toFixed(6)}</p>
+                  <div>
+                    <p>
+                      <b>Latitude:</b>{" "}
+                      {parseFloat(selectedMarker.lat).toFixed(6)}
+                    </p>
+                    <p>
+                      <b>Longitude:</b>{" "}
+                      {parseFloat(selectedMarker.lng).toFixed(6)}
+                    </p>
+                  </div>
                 </div>
               )}
             </Pin>
@@ -107,7 +145,13 @@ export default function ElementMap() {
         )}
       </Map>
 
-      {/* Create marker modal */}
+      <MapControl position={ControlPosition.TOP}>
+        <div className="autocomplete-control">
+          <PlaceAutocomplete onPlaceSelect={setSelectedPlace} />
+        </div>
+      </MapControl>
+      <MapHandler place={selectedPlace} marker={marker} />
+
       <MarkerInfoModal
         isMobile={true}
         open={openCreateModal}
@@ -115,23 +159,32 @@ export default function ElementMap() {
         position="bottom"
       >
         {openCreateModal && (
-          <div>
+          <div className="">
+            <h4>Adicionar novo local</h4>
+            <div>
+              <p>
+                <b>Latitude:</b> {parseFloat(selectedMarker.lat).toFixed(6)}
+              </p>
+              <p>
+                <b>Longitude:</b> {parseFloat(selectedMarker.lng).toFixed(6)}
+              </p>
+            </div>
+            <div className="divider"></div>
             <input
               type="text"
               placeholder="Nome do local"
               value={newLocationName}
-              onChange={(e) => setNewLocationName(e.target.value)}
+              onChange={(e) => {
+                setNewLocationName(e.target.value);
+              }}
+              className="newLocationName"
             />
-            <div className="divider"></div>
-            <p><b>Latitude:</b> {parseFloat(selectedMarker?.lat).toFixed(6)}</p>
-            <p><b>Longitude:</b> {parseFloat(selectedMarker?.lng).toFixed(6)}</p>
-            <div className="divider"></div>
-            <button onClick={handleSaveMarker}>Salvar</button>
+            <button onClick={handleSaveMarker} className="saveCreationButton">
+              Salvar
+            </button>
           </div>
         )}
       </MarkerInfoModal>
-
-      {/* Info marker modal */}
       <MarkerInfoModal
         isMobile={true}
         open={openInfoModal}
@@ -139,27 +192,39 @@ export default function ElementMap() {
         position="bottom"
       >
         {openInfoModal && (
-          <div>
-            <h1>{selectedMarker?.name}</h1>
-            <p><b>Latitude:</b> {parseFloat(selectedMarker?.lat).toFixed(6)}</p>
-            <p><b>Longitude:</b> {parseFloat(selectedMarker?.lng).toFixed(6)}</p>
+          <div className="">
+            <h4>{selectedMarker.name}</h4>
+            <div>
+              <p>
+                <b>Latitude:</b> {parseFloat(selectedMarker.lat).toFixed(6)}
+              </p>
+              <p>
+                <b>Longitude:</b> {parseFloat(selectedMarker.lng).toFixed(6)}
+              </p>
+            </div>
+            <div className="divider"></div>
           </div>
         )}
       </MarkerInfoModal>
-
-      {/* Autocomplete control */}
-      <MapControl position={ControlPosition.TOP}>
-        <div className="autocomplete-control">
-          <PlaceAutocomplete onPlaceSelect={setSelectedPlace} />
-        </div>
-      </MapControl>
-
-      <MapHandler place={selectedPlace} />
     </div>
   );
 }
 
-// Autocomplete component
+const MapHandler = ({ place, marker }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map || !place || !marker) return;
+
+    if (place.geometry?.viewport) {
+      map.fitBounds(place.geometry?.viewport);
+    }
+
+    marker.position = place.geometry?.location;
+  }, [map, place, marker]);
+  return null;
+};
+
 const PlaceAutocomplete = ({ onPlaceSelect }) => {
   const [placeAutocomplete, setPlaceAutocomplete] = useState(null);
   const inputRef = useRef(null);
@@ -174,7 +239,6 @@ const PlaceAutocomplete = ({ onPlaceSelect }) => {
 
     setPlaceAutocomplete(new places.Autocomplete(inputRef.current, options));
   }, [places]);
-
   useEffect(() => {
     if (!placeAutocomplete) return;
 
@@ -182,28 +246,9 @@ const PlaceAutocomplete = ({ onPlaceSelect }) => {
       onPlaceSelect(placeAutocomplete.getPlace());
     });
   }, [onPlaceSelect, placeAutocomplete]);
-
   return (
     <div className="autocomplete-container">
-      <input ref={inputRef} placeholder="Pesquisar local..." />
+      <input ref={inputRef} />
     </div>
   );
-};
-
-// Map handler for selected place
-const MapHandler = ({ place }) => {
-  const map = useMap();
-  const markerRef = useAdvancedMarkerRef();
-
-  useEffect(() => {
-    if (!map || !place || !markerRef.current) return;
-
-    if (place.geometry?.viewport) {
-      map.fitBounds(place.geometry.viewport);
-    }
-
-    markerRef.current.position = place.geometry?.location;
-  }, [map, place, markerRef]);
-
-  return null;
 };
