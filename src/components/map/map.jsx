@@ -269,7 +269,11 @@ export default function ElementMap(props) {
               </p>
             </div>
             <button className="buttonSaveMain" onClick={() => {
-              localStorage.setItem("main-marker", selectedMarker);
+              localStorage.setItem("main-marker", JSON.stringify({
+                name: selectedMarker.name,
+                lat: selectedMarker.lat,
+                lon: selectedMarker.lng
+              }));
               onSetMain({
                 name: selectedMarker.name,
                 lat: selectedMarker.lat,

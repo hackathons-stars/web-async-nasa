@@ -13,7 +13,16 @@ import dataOpen from "./data.json";
 import ElementInputSugestao from "../../components/input-sugestao/input-sugestao";
 
 export default function Home() {
-  const [mainLoc, setMainLoc] = useState(localStorage.getItem("main-marker") ?? { name: "Campo Mourão", lon: -52.319212, lat: -24.051162 });
+
+  let locInit;
+
+  try {
+    locInit = JSON.parse(localStorage.getItem("main-marker"))
+  } catch (error) {
+    locInit = null
+  }
+
+  const [mainLoc, setMainLoc] = useState(locInit ?? { name: "Campo Mourão", lon: -52.319212, lat: -24.051162 });
   console.log(localStorage.getItem("main-marker"));
 
   const [disableSend, setDisableSend] = useState(false);
@@ -124,7 +133,7 @@ export default function Home() {
           {iaText &&
             <div className="containerIAText">
               <h3>Resultado da consulta</h3>
-              {iaText.message.split("\n").map((text, index)=>{
+              {iaText.message.split("\n").map((text, index) => {
                 return <p key={index}>{text}</p>
               })}
             </div>}
