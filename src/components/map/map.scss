@@ -25,11 +25,30 @@
   font-size: 16px;
   font-weight: 500;
 
-  color: #f7f7f7;
+  color: black;
 
   text-wrap: nowrap;
 
-  margin-top: -50px;
+  transform: translateY(-60%);
+  padding: 12px;
+  border-radius: 15px;
+
+  background-color: rgb(234, 218, 184);
+
+  .markerNameText{
+    font-size: 20px;
+  }
+
+  .continerMetric{
+    display: flex;
+    align-items: center;
+    justify-content: space-between ;
+    gap: 5px;
+
+  }
+  p{
+    margin-bottom: 5px;
+  }
 }
 
 .addButton {

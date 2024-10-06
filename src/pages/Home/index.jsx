@@ -25,8 +25,6 @@ export default function Home() {
 
   const [weatherForecast, setWeatherForecast] = useState([]);
 
-  const [markers, setMarkers] = useState([]);
-
   const updateMarkers = async () => {
     const data = dataOpen;
 
@@ -106,9 +104,6 @@ export default function Home() {
       */
   }, []);
 
-  useEffect(() => {
-    updateMarkers();
-  }, []);
 
   return (
     <div id="Home">
@@ -134,7 +129,9 @@ export default function Home() {
           <ElementMap onSaveDefaultLoc={() => {
             console.log("Salvo como favorito !");
           }}
-            updateMarkers={updateMarkers}
+            onSetMain={({name, lat, lon})=>{
+              console.log(name, lat, lon);
+            }}
           />
         </StructSlideBottom>
       </div>

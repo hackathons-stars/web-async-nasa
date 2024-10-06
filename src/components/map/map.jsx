@@ -12,13 +12,13 @@ import {
 } from "@vis.gl/react-google-maps";
 import { useState, useEffect, useRef } from "react";
 
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaSun } from "react-icons/fa";
 import MarkerInfoModal from "../marker-info-modal/marker-info-modal";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdWaterDrop } from "react-icons/md";
+import dataOpen from "./data.json";
+import { FaTemperatureFull, FaTemperatureHigh } from "react-icons/fa6";
 
 export default function ElementMap(props) {
-  const { onSaveDefaultLoc , updateMarkers} = props;
-
   const [markers, setMarkers] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -31,8 +31,29 @@ export default function ElementMap(props) {
   const [mapZoom, setMapZoom] = useState(17);
 
   useEffect(() => {
-    const savedMarkers = JSON.parse(localStorage.getItem("markers")) || [];
-    setMarkers(savedMarkers);
+    (async () => {
+      
+      const savedMarkes = JSON.parse(localStorage.getItem("markers")) ?? [];
+      
+      const markersWithData = [];
+      
+      for (let i = 0; i < savedMarkes.length; i++) {
+        const { name, lat, lng } = savedMarkes.at(i);
+        
+        //const { current } = await getWeather(lng, lat);
+        const data = dataOpen;
+        const { current } = await (async () => { return data })();
+        const { temp, uvi, humidity } = current;
+
+        markersWithData.push({
+          name, lat, lng, temp, uvi, humidity
+        })
+      }
+
+      console.log(markersWithData);
+
+      setMarkers(markersWithData);
+    })()
   }, []);
 
   useEffect(() => {
@@ -67,16 +88,23 @@ export default function ElementMap(props) {
     if (!selectedMarker) return;
     if (!newLocationName) return;
 
-    const newMarker = {
-      name: newLocationName,
-      ...selectedMarker,
-    };
+    (async () => {
+      const { lat, lng } = selectedMarker;
 
-    setMarkers([...markers, newMarker]);
-    setSelectedMarker(null);
-    setNewLocationName("");
+      const data = dataOpen;
+      const { current } = await (async () => { return data })();
+      const { temp, uvi, humidity } = current;
 
-    setOpenCreateModal(false);
+      const newMarker = ({
+        name: newLocationName, lat, lng, temp, uvi, humidity
+      })
+
+      setMarkers([...markers, newMarker]);
+      setSelectedMarker(null);
+      setNewLocationName("");
+
+      setOpenCreateModal(false);
+    })()
   };
 
   const handleMarkerClick = (marker) => {
@@ -122,7 +150,20 @@ export default function ElementMap(props) {
             >
               {mapZoom > 15 && (
                 <div className="markerName">
-                  <p>{marker.name || "Posição customizada"}</p>
+
+                  <h3 className="markerNameText">{marker.name || "Posição customizada"}</h3>
+                  <div className="continerMetric">
+                    <FaTemperatureFull size={20} />
+                    <span>{marker.temp} °C</span>
+                  </div>
+                  <div className="continerMetric">
+                    <MdWaterDrop size={20} />
+                    <span>{marker.humidity} %</span>
+                  </div>
+                  <div className="continerMetric">
+                    <FaSun size={20} />
+                    <span>{marker.uvi} </span>
+                  </div>
                 </div>
               )}
             </Pin>
@@ -225,7 +266,6 @@ export default function ElementMap(props) {
                 <b>Longitude:</b> {parseFloat(selectedMarker.lng).toFixed(6)}
               </p>
             </div>
-            <button>Salvar como principal</button>
             <div className="divider"></div>
           </div>
         )}
