@@ -13,6 +13,7 @@ export default function Home() {
         tempMin="20 °C"
         humidity="20%"
         precipitation="1mm"
+        onSearch={() => { console.log("Pesquisar") }}
       />
       <ElementForecastWeather
         title="Previsão do tempo 8 dias"
