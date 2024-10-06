@@ -1,15 +1,19 @@
+import "./today-weather.scss";
+import { WiHumidity } from "react-icons/wi";
+import { FaSun } from "react-icons/fa";
+
 export default function ElementTodayWeather(props) {
-  const { city, tempMax, tempMin, humidity, precipitation, onSearch, icon, uiv } = props;
+  const { title, tempMax, tempMin, humidity, precipitation, onSearch, icon, uiv, description } = props;
 
   return (
     <div className="elementTodayWeather">
-      <h2>{city}</h2>
-      <button onClick={() => { onSearch(); }}>Procurar</button>
+      <h2 className="title">{title}</h2>
+      <p>{description}</p>
       <p><strong>temperatura maxima: </strong>{tempMax}</p>
       <p><strong>temperatura minima: </strong>{tempMin}</p>
-      <p><strong>humidade: </strong>{humidity}</p>
-      <p><strong>uiv: </strong>{uiv}</p>
-      <img src={icon} alt="" />
+      <WiHumidity /><p><strong>humidade: </strong>{humidity}</p>
+      <FaSun /><p><strong>iuv: </strong>{uiv}</p>
+      <img className="icon" src={icon} alt="" />
       {/* <p><strong>precipitação: </strong>{precipitation}</p> */}
     </div>
   )

@@ -1,3 +1,10 @@
 .elementTodayWeather{
-  
+  padding: 12px 20px;
+  position: relative;
+
+  .icon{
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
 }

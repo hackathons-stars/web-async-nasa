@@ -16,7 +16,8 @@ export default function Home() {
     humidity: "...",
     precipitation: "...",
     icon: "",
-    uiv: "..."
+    uiv: "...",
+    description: ""
   })
 
   useEffect(() => {
@@ -30,7 +31,8 @@ export default function Home() {
     todayWeather.uiv = current.uvi;
     todayWeather.icon = getIcon(current.weather.at(0).icon);
     todayWeather.precipitation = "";
-    console.log({...todayWeather});
+    todayWeather.description = current.weather.at(0).description;
+    console.log({ ...todayWeather });
 
     /*
     console.log(data);
@@ -63,12 +65,13 @@ export default function Home() {
     <div id="Home">
       <div className='containerHome'>
         <ElementTodayWeather
-          city={todayWeather.city}
+          title={todayWeather.city}
           tempMax={todayWeather.tempMax}
           tempMin={todayWeather.tempMin}
           humidity={todayWeather.humidity}
           icon={todayWeather.icon}
           uiv={todayWeather.uiv}
+          description={todayWeather.description}
           onSearch={() => { console.log("Pesquisar") }}
         />
         <ElementForecastWeather
