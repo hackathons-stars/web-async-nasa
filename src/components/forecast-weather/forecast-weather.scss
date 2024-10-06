@@ -1,0 +1,42 @@
+.elementForecastWeather{
+  padding: 12px 15px;
+
+  .linha{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .containerIcon{
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      .text{
+        text-transform: capitalize;
+      }
+  
+      .icon{
+        width: 60px;
+      }
+    }
+
+    .containerTemp{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+
+      width: 200px;
+
+      .textTemp{
+        font-size: 20px;
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .divisor{
+    padding: 0;
+    margin: 5px 0;
+    opacity: 0.2;
+  }
+}

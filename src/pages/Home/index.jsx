@@ -20,6 +20,8 @@ export default function Home() {
     description: ""
   })
 
+  const [weatherForecast, setWeatherForecast] = useState([]);
+
   useEffect(() => {
     const data = dataOpen;
     const { current, daily } = data;
@@ -33,6 +35,20 @@ export default function Home() {
     todayWeather.precipitation = "";
     todayWeather.description = current.weather.at(0).description;
     console.log({ ...todayWeather });
+
+    setWeatherForecast(daily.map(({ weather, temp, uvi, humidity, dt }) => {
+      const date = new Date(dt*1000);
+
+      return {
+        date: date.toLocaleDateString('pt-BR'),
+        humidity: humidity,
+        uiv: uvi,
+        icon: getIcon(weather.at(0)?.icon),
+        description: weather.at(0).description,
+        tempMax: temp.max,
+        tempMin: temp.min,
+      }
+    }));
 
     /*
     console.log(data);
@@ -64,26 +80,24 @@ export default function Home() {
   return (
     <div id="Home">
       <div className='containerHome'>
-        <ElementTodayWeather
-          temp={todayWeather.temp}
-          title={todayWeather.city}
-          tempMax={todayWeather.tempMax}
-          tempMin={todayWeather.tempMin}
-          humidity={todayWeather.humidity}
-          icon={todayWeather.icon}
-          uiv={todayWeather.uiv}
-          description={todayWeather.description}
-          onSearch={() => { console.log("Pesquisar") }}
-        />
-        <ElementForecastWeather
-          title="Previsão do tempo 8 dias"
-          date="05/10/2024"
-          data={[
-            { temp: 10, humidity: 10, precipitation: 10 },
-            { temp: 10, humidity: 10, precipitation: 10 },
-            { temp: 10, humidity: 10, precipitation: 10 },
-            { temp: 10, humidity: 10, precipitation: 10 }]}
-        />
+        <div className="content">
+
+          <ElementTodayWeather
+            temp={todayWeather.temp}
+            title={todayWeather.city}
+            tempMax={todayWeather.tempMax}
+            tempMin={todayWeather.tempMin}
+            humidity={todayWeather.humidity}
+            icon={todayWeather.icon}
+            uiv={todayWeather.uiv}
+            description={todayWeather.description}
+            onSearch={() => { console.log("Pesquisar") }}
+          />
+          <ElementForecastWeather
+            title="Previsão do tempo"
+            data={weatherForecast}
+          />
+        </div>
         <StructSlideBottom>
           <ElementMap />
         </StructSlideBottom>

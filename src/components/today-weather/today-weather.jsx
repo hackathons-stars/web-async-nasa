@@ -16,7 +16,7 @@ export default function ElementTodayWeather(props) {
         <div>
           <h3>Máxima</h3>
           <div className="containerTempIcon">
-            <FaTemperatureArrowUp size={30} />
+            <FaTemperatureArrowUp size={20} />
             <span className="textTemp">
               {tempMax} °C
             </span>
@@ -25,7 +25,7 @@ export default function ElementTodayWeather(props) {
         <div>
           <h3>Mínima</h3>
           <div className="containerTempIcon">
-            <FaTemperatureArrowDown size={30} />
+            <FaTemperatureArrowDown size={20} />
             <span className="textTemp">
               {tempMin} °C
             </span>
