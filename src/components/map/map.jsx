@@ -1,9 +1,21 @@
 import "./map.scss";
-import { AdvancedMarker, Map, Pin } from "@vis.gl/react-google-maps";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import {
+  APIProvider,
+  ControlPosition,
+  MapControl,
+  AdvancedMarker,
+  Map,
+  Pin,
+  useMap,
+  useMapsLibrary,
+  useAdvancedMarkerRef,
+} from "@vis.gl/react-google-maps";
 
 export default function ElementMap() {
-  const [marker, setMarker] = useState(null);
+  const [marker2, setMarker] = useState(null);
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [markerRef, marker] = useAdvancedMarkerRef();
 
   const handleMapClick = (e) => {
     console.log(e.detail.latLng.lat, e.detail.latLng.lng);
@@ -27,8 +39,8 @@ export default function ElementMap() {
       draggingCursor={"move"}
       draggableCursor={"pointer"}
     >
-      {marker && (
-        <AdvancedMarker position={{ lat: marker.lat, lng: marker.lng }}>
+      {marker2 && (
+        <AdvancedMarker position={{ lat: marker2.lat, lng: marker2.lng }}>
           <Pin
             background={"#0f9d58"}
             borderColor={"#006425"}
@@ -36,6 +48,57 @@ export default function ElementMap() {
           />
         </AdvancedMarker>
       )}
+      <AdvancedMarker ref={markerRef} position={null} />
     </Map>
+    <MapControl position={ControlPosition.TOP}>
+      <div className="autocomplete-control">
+        <PlaceAutocomplete onPlaceSelect={setSelectedPlace} />
+      </div>
+    </MapControl>
+    <MapHandler place={selectedPlace} marker={marker} />
   </div>);
-} 
+}
+
+
+const MapHandler = ({ place, marker }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map || !place || !marker) return;
+
+    if (place.geometry?.viewport) {
+      map.fitBounds(place.geometry?.viewport);
+    }
+
+    marker.position = place.geometry?.location;
+  }, [map, place, marker]);
+  return null;
+};
+
+const PlaceAutocomplete = ({ onPlaceSelect }) => {
+  const [placeAutocomplete, setPlaceAutocomplete] = useState(null);
+  const inputRef = useRef(null);
+  const places = useMapsLibrary("places");
+
+  useEffect(() => {
+    if (!places || !inputRef.current) return;
+
+    const options = {
+      fields: ["geometry", "name", "formatted_address"],
+    };
+
+    setPlaceAutocomplete(new places.Autocomplete(inputRef.current, options));
+  }, [places]);
+  useEffect(() => {
+    if (!placeAutocomplete) return;
+
+    placeAutocomplete.addListener("place_changed", () => {
+      onPlaceSelect(placeAutocomplete.getPlace());
+    });
+  }, [onPlaceSelect, placeAutocomplete]);
+  return (
+    <div className="autocomplete-container">
+      <input ref={inputRef} />
+    </div>
+  );
+};
