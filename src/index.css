@@ -1,20 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
   text-decoration: none;
+  font-family: "Montserrat", sans-serif;
 }
 
 :root {
   --Baby-powder: 241, 245, 242;
-  --Ecru: 194, 168, 120;
-  --Field-drab: 110, 99, 61;
-  --Hunter-green: 53, 88, 52;
-  --Dark-green: 20, 40, 29;
 }
 
 .header {
-  background-color: rgba(var(--Ecru), .9);
+  background-color: rgba(var(--Baby-powder), .9);
   transition: background-color 0.3s;
   position: fixed;
   top: 0;
@@ -25,7 +24,7 @@
 }
 
 .header.scrolled {
-  background-color: rgba(var(--Ecru), .6);
+  background-color: rgba(var(--Baby-powder), .6);
 }
 
 .header .menu-icon,
@@ -36,4 +35,12 @@
 .header .navbar-nav {
   display: flex;
   flex-direction: row;
+}
+
+.Location {
+  margin-top: 60px;
+}
+
+btn-outline-success, #dropdown-basic-button {
+  margin: 5px auto;
 }
