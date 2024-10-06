@@ -14,6 +14,7 @@ export default function ElementInputSugestao({ onSend, disable }) {
       <h2>Consulte na região quais são os cultivos mais propícios, com dados históricos !</h2>
       <p>O que você cultiva ?</p>
       <textarea
+        className='textArea'
         type=""
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
