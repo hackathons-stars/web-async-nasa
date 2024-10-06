@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../index.css';
 import Header from './Header';
+import Grafico from './grafico';
 import Footer from './Footer';
 import ensolarado from '../icons/sol.png';
 import nublado from '../icons/nuvem.png';
@@ -156,7 +157,9 @@ const Home = () => {
           <h2 className="text-danger">Clima seco.</h2>
           <p>Previsão de seca para os próximos 15 dias. Condições de tempo limpas pela manhã, alta incidência de raios UV.</p>
         </section>
-
+        {/* Gráfico de chuvas */}
+        <Grafico />
+        {/* Rodapé */}
         <Footer />
       </div>
     </>
