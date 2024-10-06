@@ -1,3 +1,4 @@
+import "./home.scss";
 import React from 'react';
 import StructSlideBottom from '../../components/slide-bottom/slide-bottom';
 import ElementMap from '../../components/map/map';
@@ -6,7 +7,8 @@ import ElementForecastWeather from '../../components/forecast-weather/forecast-w
 
 export default function Home() {
   return (
-    <>
+    <div id="Home">
+      <div className='containerHome'>
       <ElementTodayWeather
         city="Campo Mourão"
         tempMax="28 °C"
@@ -27,6 +29,7 @@ export default function Home() {
       <StructSlideBottom>
         <ElementMap />
       </StructSlideBottom>
-    </>
+      </div>
+    </div>
   );
 };
