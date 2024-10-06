@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import "./map.scss";
 import {
-  APIProvider,
   ControlPosition,
   MapControl,
   AdvancedMarker,
@@ -15,6 +14,7 @@ import { useState, useEffect, useRef } from "react";
 
 import { FaPlus } from "react-icons/fa";
 import MarkerInfoModal from "../marker-info-modal/marker-info-modal";
+import { MdDelete } from "react-icons/md";
 
 export default function ElementMap() {
   const [markers, setMarkers] = useState([]);
@@ -38,6 +38,19 @@ export default function ElementMap() {
       localStorage.setItem("markers", JSON.stringify(markers));
     }
   }, [markers]);
+
+  const handleDeleteMarker = () => {
+    if (!selectedMarker) return;
+
+    const newMarkers = markers.filter(
+      (marker) =>
+        marker.lat !== selectedMarker.lat && marker.lng !== selectedMarker.lng
+    );
+
+    setMarkers(newMarkers);
+    setSelectedMarker(null);
+    setOpenInfoModal(false);
+  };
 
   const handleMapClick = (e) => {
     const newMarker = {
@@ -188,12 +201,20 @@ export default function ElementMap() {
       <MarkerInfoModal
         isMobile={true}
         open={openInfoModal}
-        onClose={() => setOpenInfoModal(false)}
+        onClose={() => {
+          setOpenInfoModal(false);
+          setSelectedMarker(null);
+        }}
         position="bottom"
       >
         {openInfoModal && (
-          <div className="">
-            <h4>{selectedMarker.name}</h4>
+          <div className="info-modal">
+            <div className="info-modal-header">
+              <h4>{selectedMarker.name}</h4>
+              <button onClick={() => handleDeleteMarker()}>
+                <MdDelete />
+              </button>
+            </div>
             <div>
               <p>
                 <b>Latitude:</b> {parseFloat(selectedMarker.lat).toFixed(6)}
@@ -219,8 +240,6 @@ const MapHandler = ({ place, marker }) => {
     if (place.geometry?.viewport) {
       map.fitBounds(place.geometry?.viewport);
     }
-
-    marker.position = place.geometry?.location;
   }, [map, place, marker]);
   return null;
 };
@@ -248,7 +267,7 @@ const PlaceAutocomplete = ({ onPlaceSelect }) => {
   }, [onPlaceSelect, placeAutocomplete]);
   return (
     <div className="autocomplete-container">
-      <input ref={inputRef} />
+      <input ref={inputRef} className="searchLocationInput" />
     </div>
   );
 };

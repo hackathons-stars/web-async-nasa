@@ -82,3 +82,27 @@
   border-radius: 8px;
   margin-top: 10px;
 }
+
+.info-modal {
+  .info-modal-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    button {
+      background-color: transparent;
+      border: none;
+      font-size: 28px;
+      color: #ff4242;
+    }
+  }
+}
+
+.searchLocationInput {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #6e6e6e;
+  border-radius: 8px;
+  margin-top: 10px;
+}
