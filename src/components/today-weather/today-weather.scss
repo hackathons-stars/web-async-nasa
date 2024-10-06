@@ -1,3 +1,40 @@
 .elementTodayWeather{
-  
+  padding: 12px 20px;
+  padding-top: 30px;
+  position: relative;
+
+  .title{
+    font-size: 28px;
+  }
+
+  .description{
+    font-size: 20px;
+    text-transform: capitalize;
+  }
+
+  .containerTemp{
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    margin-bottom: 30px;
+
+    .containerTempIcon{
+      display:  flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      .textTemp {
+          font-size: 18px;
+          font-weight: 500;
+        }
+    }
+
+  }
+
+
+  .icon{  
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
 }
