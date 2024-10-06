@@ -29,7 +29,7 @@
 
   text-wrap: nowrap;
 
-  transform: translateY(-60%);
+  transform: translateY(-65%);
   padding: 12px;
   border-radius: 15px;
 
@@ -124,4 +124,24 @@
   border: 1px solid #6e6e6e;
   border-radius: 8px;
   margin-top: 10px;
+}
+
+.buttonSaveMain{
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+  background-color: #0e4216;
+
+  height: 50px;
+  color: white; 
+  transition: all .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+
+  &:active{
+  background-color: #08240c;
+  }
+
 }

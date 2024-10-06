@@ -17,8 +17,10 @@ import MarkerInfoModal from "../marker-info-modal/marker-info-modal";
 import { MdDelete, MdWaterDrop } from "react-icons/md";
 import dataOpen from "./data.json";
 import { FaTemperatureFull, FaTemperatureHigh } from "react-icons/fa6";
+import { IoSave } from "react-icons/io5";
 
 export default function ElementMap(props) {
+  const { onSetMain } = props;
   const [markers, setMarkers] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -32,14 +34,14 @@ export default function ElementMap(props) {
 
   useEffect(() => {
     (async () => {
-      
+
       const savedMarkes = JSON.parse(localStorage.getItem("markers")) ?? [];
-      
+
       const markersWithData = [];
-      
+
       for (let i = 0; i < savedMarkes.length; i++) {
         const { name, lat, lng } = savedMarkes.at(i);
-        
+
         //const { current } = await getWeather(lng, lat);
         const data = dataOpen;
         const { current } = await (async () => { return data })();
@@ -266,6 +268,19 @@ export default function ElementMap(props) {
                 <b>Longitude:</b> {parseFloat(selectedMarker.lng).toFixed(6)}
               </p>
             </div>
+            <button className="buttonSaveMain" onClick={() => {
+              localStorage.setItem("main-marker", selectedMarker);
+              onSetMain({
+                name: selectedMarker.name,
+                lat: selectedMarker.lat,
+                lon: selectedMarker.lng
+              });
+            }}>
+              <IoSave size={20} />
+              <span>
+                Definir Principal
+              </span>
+            </button>
             <div className="divider"></div>
           </div>
         )}

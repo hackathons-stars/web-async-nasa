@@ -11,6 +11,8 @@ import {
 import dataOpen from "./data.json";
 
 export default function Home() {
+  const [mainLoc, setMainLoc] = useState(localStorage.getItem("main-marker") ?? { name: "Campo Mourão", lon: -52.319212, lat: -24.051162 });
+
   const [todayWeather, setTodayWeather] = useState({
     city: "...",
     temp: "...",
@@ -25,34 +27,10 @@ export default function Home() {
 
   const [weatherForecast, setWeatherForecast] = useState([]);
 
-  const updateMarkers = async () => {
-    const data = dataOpen;
-
-    const savedMarkes = JSON.parse(localStorage.getItem("markers")) ?? [];
-
-    const markersWithData = [];
-
-    for (let i = 0; i < savedMarkes.length; i++) {
-      const { name, lat, lng } = savedMarkes.at(i);
-
-      //const { current } = await getWeather(lng, lat);
-      const { current } = await (async () => { return data })();
-      const { temp, uvi, humidity } = current;
-
-      markersWithData.push({
-        name, lat, lng, temp, uvi, humidity
-      })
-    }
-
-    console.log(markersWithData);
-
-    setMarkers(markersWithData);
-  }
-
   useEffect(() => {
+    console.log("update dados");
     const data = dataOpen;
     const { current, daily } = data;
-    todayWeather.city = "Campo Mourão";
     todayWeather.temp = current.temp;
     todayWeather.tempMax = daily.at(0).temp.max;
     todayWeather.tempMin = daily.at(0).temp.max;
@@ -102,7 +80,7 @@ export default function Home() {
       })
       .catch((error) => { console.log(error) });
       */
-  }, []);
+  }, [mainLoc]);
 
 
   return (
@@ -111,14 +89,13 @@ export default function Home() {
         <div className="contentHome">
           <ElementTodayWeather
             temp={todayWeather.temp}
-            title={todayWeather.city}
+            title={mainLoc.name}
             tempMax={todayWeather.tempMax}
             tempMin={todayWeather.tempMin}
             humidity={todayWeather.humidity}
             icon={todayWeather.icon}
             uiv={todayWeather.uiv}
             description={todayWeather.description}
-            onSearch={() => { console.log("Pesquisar") }}
           />
           <ElementForecastWeather
             title="Previsão do tempo"
@@ -129,8 +106,9 @@ export default function Home() {
           <ElementMap onSaveDefaultLoc={() => {
             console.log("Salvo como favorito !");
           }}
-            onSetMain={({name, lat, lon})=>{
+            onSetMain={({ name, lat, lon }) => {
               console.log(name, lat, lon);
+              setMainLoc({name,lat,lon})
             }}
           />
         </StructSlideBottom>
