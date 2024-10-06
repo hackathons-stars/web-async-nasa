@@ -9,7 +9,6 @@ import {
   getIcon,
   getWeather,
 } from "../../service/open-weather-api/open-weather-api";
-import dataOpen from "./data.json";
 import ElementInputSugestao from "../../components/input-sugestao/input-sugestao";
 
 export default function Home() {
@@ -44,59 +43,35 @@ export default function Home() {
   const [weatherForecast, setWeatherForecast] = useState([]);
 
   useEffect(() => {
-    console.log("update dados");
-    const data = dataOpen;
-    const { current, daily } = data;
-    todayWeather.temp = current.temp;
-    todayWeather.tempMax = daily.at(0).temp.max;
-    todayWeather.tempMin = daily.at(0).temp.max;
-    todayWeather.humidity = current.humidity;
-    todayWeather.uiv = current.uvi;
-    todayWeather.icon = getIcon(current.weather.at(0).icon);
-    todayWeather.precipitation = "";
-    todayWeather.description = current.weather.at(0).description;
-    setTodayWeather({ ...todayWeather });
-
-    setWeatherForecast(daily.map(({ weather, temp, uvi, humidity, dt }) => {
-      const date = new Date(dt * 1000);
-
-      return {
-        date: date.toLocaleDateString('pt-BR'),
-        humidity: humidity,
-        uiv: uvi,
-        icon: getIcon(weather.at(0)?.icon),
-        description: weather.at(0).description,
-        tempMax: temp.max,
-        tempMin: temp.min,
-      }
-    }));
-
-
-    /*
-    console.log(data);
-
-    
-
-    /*
-    getWeather(-52.319212, -24.051162)
+    getWeather(mainLoc.lon, mainLoc.lat)
       .then((data) => {
-        console.log(data);
+
         const { current, daily } = data;
-        
-        todayWeather.city = "Campo Mourão";
-        todayWeather.temp = current.temp
+        todayWeather.temp = current.temp;
         todayWeather.tempMax = daily.at(0).temp.max;
         todayWeather.tempMin = daily.at(0).temp.max;
         todayWeather.humidity = current.humidity;
         todayWeather.uiv = current.uvi;
         todayWeather.icon = getIcon(current.weather.at(0).icon);
         todayWeather.precipitation = "";
-        
-        setTodayWeather(...todayWeather)
+        todayWeather.description = current.weather.at(0).description;
+        setTodayWeather({ ...todayWeather });
 
-        })
+        setWeatherForecast(daily.map(({ weather, temp, uvi, humidity, dt }) => {
+          const date = new Date(dt * 1000);
+
+          return {
+            date: date.toLocaleDateString('pt-BR'),
+            humidity: humidity,
+            uiv: uvi,
+            icon: getIcon(weather.at(0)?.icon),
+            description: weather.at(0).description,
+            tempMax: temp.max,
+            tempMin: temp.min,
+          }
+        }));
+      })
       .catch((error) => { console.log(error) });
-      */
   }, [mainLoc]);
 
   return (

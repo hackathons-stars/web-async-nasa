@@ -15,9 +15,9 @@ import { useState, useEffect, useRef } from "react";
 import { FaPlus, FaSun } from "react-icons/fa";
 import MarkerInfoModal from "../marker-info-modal/marker-info-modal";
 import { MdDelete, MdWaterDrop } from "react-icons/md";
-import dataOpen from "./data.json";
 import { FaTemperatureFull, FaTemperatureHigh } from "react-icons/fa6";
 import { IoSave } from "react-icons/io5";
+import { getWeather } from "../../service/open-weather-api/open-weather-api";
 
 export default function ElementMap(props) {
   const { onSetMain } = props;
@@ -43,8 +43,7 @@ export default function ElementMap(props) {
         const { name, lat, lng } = savedMarkes.at(i);
 
         //const { current } = await getWeather(lng, lat);
-        const data = dataOpen;
-        const { current } = await (async () => { return data })();
+        const { current } = await getWeather(lng, lat);
         const { temp, uvi, humidity } = current;
 
         markersWithData.push({
@@ -93,8 +92,8 @@ export default function ElementMap(props) {
     (async () => {
       const { lat, lng } = selectedMarker;
 
-      const data = dataOpen;
-      const { current } = await (async () => { return data })();
+      const { current } = await getWeather(lng, lat);
+
       const { temp, uvi, humidity } = current;
 
       const newMarker = ({
