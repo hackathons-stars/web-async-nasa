@@ -65,6 +65,7 @@ export default function Home() {
     <div id="Home">
       <div className='containerHome'>
         <ElementTodayWeather
+          temp={todayWeather.temp}
           title={todayWeather.city}
           tempMax={todayWeather.tempMax}
           tempMin={todayWeather.tempMin}
