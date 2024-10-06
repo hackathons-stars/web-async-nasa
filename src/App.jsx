@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import "./App.css";
+import { APIProvider } from "@vis.gl/react-google-maps";
 import Home from "./pages/Home";
 import routes from "./routes/routes";
-import { APIProvider } from "@vis.gl/react-google-maps";
+import "./App.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
