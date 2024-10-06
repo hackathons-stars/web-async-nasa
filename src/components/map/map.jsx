@@ -15,7 +15,7 @@ export default function ElementMap() {
 
   return (<div>
     <Map
-      style={{ width: `${430}px`, height: `${891}px` }}
+      style={{ width: `${430}px`, height: `${855}px` }}
       defaultCenter={{ lat: -24.029286, lng: -52.3370791 }}
       streetView={true}
       defaultZoom={17}
