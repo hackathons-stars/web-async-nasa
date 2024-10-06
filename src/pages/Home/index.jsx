@@ -5,13 +5,20 @@ import ElementTodayWeather from "../../components/today-weather/today-weather";
 import ElementForecastWeather from "../../components/forecast-weather/forecast-weather";
 import { useState, useEffect } from "react";
 import {
+  getIA,
   getIcon,
   getWeather,
 } from "../../service/open-weather-api/open-weather-api";
 import dataOpen from "./data.json";
+import ElementInputSugestao from "../../components/input-sugestao/input-sugestao";
 
 export default function Home() {
   const [mainLoc, setMainLoc] = useState(localStorage.getItem("main-marker") ?? { name: "Campo Mourão", lon: -52.319212, lat: -24.051162 });
+  console.log(localStorage.getItem("main-marker"));
+
+  const [disableSend, setDisableSend] = useState(false);
+
+  const [iaText, setIaText] = useState(null);
 
   const [todayWeather, setTodayWeather] = useState({
     city: "...",
@@ -39,7 +46,7 @@ export default function Home() {
     todayWeather.icon = getIcon(current.weather.at(0).icon);
     todayWeather.precipitation = "";
     todayWeather.description = current.weather.at(0).description;
-    console.log({ ...todayWeather });
+    setTodayWeather({ ...todayWeather });
 
     setWeatherForecast(daily.map(({ weather, temp, uvi, humidity, dt }) => {
       const date = new Date(dt * 1000);
@@ -55,17 +62,18 @@ export default function Home() {
       }
     }));
 
+
     /*
     console.log(data);
 
-
+    
 
     /*
     getWeather(-52.319212, -24.051162)
       .then((data) => {
         console.log(data);
         const { current, daily } = data;
-
+        
         todayWeather.city = "Campo Mourão";
         todayWeather.temp = current.temp
         todayWeather.tempMax = daily.at(0).temp.max;
@@ -74,14 +82,13 @@ export default function Home() {
         todayWeather.uiv = current.uvi;
         todayWeather.icon = getIcon(current.weather.at(0).icon);
         todayWeather.precipitation = "";
-
+        
         setTodayWeather(...todayWeather)
 
-      })
+        })
       .catch((error) => { console.log(error) });
       */
   }, [mainLoc]);
-
 
   return (
     <div id="Home">
@@ -101,6 +108,26 @@ export default function Home() {
             title="Previsão do tempo"
             data={weatherForecast}
           />
+          <ElementInputSugestao onSend={(text) => {
+            console.log(text);
+            setDisableSend(true);
+
+            getIA(mainLoc.lon, mainLoc.lat, text).then((data) => {
+              console.log(data);
+              setIaText(data);
+            }).catch((error) => {
+              console.log("error", error);
+            }).finally(() => {
+              setDisableSend(false);
+            });
+          }} disable={disableSend} />
+          {iaText &&
+            <div className="containerIAText">
+              <h3>Resultado da consulta</h3>
+              {iaText.message.split("\n").map((text, index)=>{
+                return <p key={index}>{text}</p>
+              })}
+            </div>}
         </div>
         <StructSlideBottom>
           <ElementMap onSaveDefaultLoc={() => {
@@ -108,7 +135,7 @@ export default function Home() {
           }}
             onSetMain={({ name, lat, lon }) => {
               console.log(name, lat, lon);
-              setMainLoc({name,lat,lon})
+              setMainLoc({ name, lat, lon })
             }}
           />
         </StructSlideBottom>
