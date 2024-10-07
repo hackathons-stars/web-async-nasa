@@ -20,7 +20,7 @@ import { IoSave } from "react-icons/io5";
 import { getWeather } from "../../service/open-weather-api/open-weather-api";
 
 export default function ElementMap(props) {
-  const { onSetMain } = props;
+  const { onSetMain, centerLat, centerLon } = props;
   const [markers, setMarkers] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -123,7 +123,7 @@ export default function ElementMap(props) {
 
       <Map
         style={{ width: `100%`, height: `calc(100vh - 80px)` }}
-        defaultCenter={{ lat: -24.029286, lng: -52.3370791 }}
+        defaultCenter={{ lat: centerLat, lng: centerLon }}
         defaultZoom={17}
         gestureHandling={"greedy"}
         disableDefaultUI={true}

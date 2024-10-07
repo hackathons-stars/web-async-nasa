@@ -121,6 +121,8 @@ export default function Home() {
               console.log(name, lat, lon);
               setMainLoc({ name, lat, lon })
             }}
+            centerLat={mainLoc.lat} 
+            centerLon={mainLoc.lon}
           />
         </StructSlideBottom>
       </div>
