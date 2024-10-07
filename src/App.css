@@ -1,0 +1,5 @@
+.containerApp {
+  max-width: 430px;
+  display: flex;
+  background-color: rgb(111, 0, 221);
+}

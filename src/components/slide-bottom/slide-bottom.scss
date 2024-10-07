@@ -1,0 +1,39 @@
+.structSlideBottom {
+  position: absolute;
+  width: 100%;
+  transition: all 0.6s;
+  top: 85%;
+  height: 100%;
+  z-index: 1000;
+
+  .slideButton {
+    width: 100%;
+    height: 60px;
+    border-radius: 15px 15px 0 0;
+    background-color: #0e4216;
+    border: none;
+
+    svg {
+      transition: all 0.6s;
+      rotate: -90deg;
+      height: 30px;
+      width: 30px;
+      color: white;
+    }
+  }
+
+  .content {
+    transform: translateY(-3px);
+    height: -webkit-fill-available;
+  }
+
+  &.open {
+    top: 20px;
+
+    .slideButton {
+      svg {
+        rotate: 90deg;
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+.elementInputSugestao {
+  padding: 12px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  
+  .textArea {
+    border-radius: 5px;
+    border: none;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+  }
+  
+  .buttonSend {
+    border-radius: 5px;
+    background-color: #0e4216;
+    border: none;
+    color: white;
+    font-size: 20px;
+    height: 50px;
+    transition: all .3s;
+
+
+    &:active {
+      background-color: #08240c;
+    }
+  }
+}

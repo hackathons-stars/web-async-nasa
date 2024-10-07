@@ -1,0 +1,147 @@
+.map-container {
+  height: -webkit-fill-available;
+}
+
+.markerInfos {
+  display: flex;
+  flex-direction: column;
+
+  background-color: #f7f7f7;
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: -180px;
+  width: 280px;
+  color: rgb(46, 46, 46);
+  font-size: 14px;
+
+  gap: 10px;
+
+  h5 {
+    margin: 0;
+  }
+}
+
+.markerName {
+  font-size: 16px;
+  font-weight: 500;
+
+  color: black;
+
+  text-wrap: nowrap;
+
+  transform: translateY(-65%);
+  padding: 12px;
+  border-radius: 15px;
+
+  background-color: rgb(234, 218, 184);
+
+  .markerNameText{
+    font-size: 20px;
+  }
+
+  .continerMetric{
+    display: flex;
+    align-items: center;
+    justify-content: space-between ;
+    gap: 5px;
+
+  }
+  p{
+    margin-bottom: 5px;
+  }
+}
+
+.addButton {
+  position: absolute;
+
+  bottom: 100px;
+  right: 20px;
+
+  z-index: 10;
+
+  font-size: 24px;
+  font-weight: 800;
+
+  padding: 10px 15px;
+  border-radius: 50%;
+  border: none;
+
+  color: #f7f7f7;
+
+  background-color: #0099ff;
+}
+
+.divider {
+  width: 100%;
+
+  height: 0.5px;
+
+  background-color: #6e6e6e;
+
+  margin: auto;
+
+  margin-top: 8px;
+}
+
+.saveCreationButton {
+  background-color: #0099ff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  margin-top: 10px;
+
+  width: 100%;
+}
+
+.newLocationName {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #6e6e6e;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.info-modal {
+  .info-modal-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    button {
+      background-color: transparent;
+      border: none;
+      font-size: 28px;
+      color: #ff4242;
+    }
+  }
+}
+
+.searchLocationInput {
+  width: 400px;
+  padding: 10px;
+  border: 1px solid #6e6e6e;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.buttonSaveMain{
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+  background-color: #0e4216;
+
+  height: 50px;
+  color: white; 
+  transition: all .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+
+  &:active{
+  background-color: #08240c;
+  }
+
+}
